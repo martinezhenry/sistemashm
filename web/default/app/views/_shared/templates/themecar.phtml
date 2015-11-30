@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es">
+ <head>
+  <meta http-equiv='Content-type' content='text/html; charset=<?php echo APP_CHARSET ?>' />
+  <title>KumbiaPHP web &amp; App Framework</title>
+  <?php Tag::css('bienvenida') ?>
+  <?php Tag::css('style') ?>
+  <?php echo Html::includeCss() ?>
+</head>
+<body>
+    <div id='content'>
+        <?php View::partial('themecar/header'); ?>
+
+        <?php View::content(); ?>
+
+        <?php View::partial('themecar/footer') ?>
+    </div>
+</body>
+</html>

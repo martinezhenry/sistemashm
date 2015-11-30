@@ -1,0 +1,23 @@
+[Fri, 27 Nov 15 14:00:38 -0430][DEBUG] DESCRIBE `ln_users`
+[Fri, 27 Nov 15 14:03:05 -0430][DEBUG] DESCRIBE `ln_users`
+[Fri, 27 Nov 15 14:03:05 -0430][DEBUG] SELECT COUNT(*) FROM ln_users 
+[Fri, 27 Nov 15 14:03:05 -0430][DEBUG] SELECT id,name,pass,email,created_at,ln_clientes_id,modified_in FROM ln_users ORDER BY id desc LIMIT 10 OFFSET 0
+[Fri, 27 Nov 15 14:03:06 -0430][DEBUG] DESCRIBE `ln_users`
+[Fri, 27 Nov 15 14:03:13 -0430][DEBUG] DESCRIBE `ln_users`
+[Fri, 27 Nov 15 14:03:13 -0430][DEBUG] INSERT INTO ln_users (name,pass,email,created_at,ln_clientes_id,modified_in) VALUES ('asdasd','admin','admin@correo.com','2015-11-27 14:03:13','1',DEFAULT)
+[Fri, 27 Nov 15 14:03:13 -0430][DEBUG] SELECT id,name,pass,email,created_at,ln_clientes_id,modified_in FROM ln_users WHERE id = 1 LIMIT 1
+[Fri, 27 Nov 15 14:03:13 -0430][DEBUG] DESCRIBE `ln_users`
+[Fri, 27 Nov 15 14:03:13 -0430][DEBUG] SELECT COUNT(*) FROM ln_users 
+[Fri, 27 Nov 15 14:03:13 -0430][DEBUG] SELECT id,name,pass,email,created_at,ln_clientes_id,modified_in FROM ln_users ORDER BY id desc LIMIT 10 OFFSET 0
+[Fri, 27 Nov 15 14:06:23 -0430][DEBUG] DESCRIBE `ln_users`
+[Fri, 27 Nov 15 14:06:23 -0430][DEBUG] SELECT id,name,pass,email,created_at,ln_clientes_id,modified_in FROM ln_users WHERE id = 1
+[Fri, 27 Nov 15 14:06:31 -0430][DEBUG] DESCRIBE `ln_users`
+[Fri, 27 Nov 15 14:06:31 -0430][DEBUG] SELECT COUNT(*) FROM ln_users WHERE  id = '1'
+[Fri, 27 Nov 15 14:06:31 -0430][DEBUG] SELECT COUNT(*) FROM ln_users WHERE  id = '1'
+[Fri, 27 Nov 15 14:06:31 -0430][DEBUG] UPDATE ln_users SET name = 'admin',pass = 'admin',email = 'admin@correo.com',ln_clientes_id = '1',modified_in = '2015-11-27 14:06:31' WHERE  id = '1'
+[Fri, 27 Nov 15 14:06:31 -0430][DEBUG] DESCRIBE `ln_users`
+[Fri, 27 Nov 15 14:06:31 -0430][DEBUG] SELECT COUNT(*) FROM ln_users 
+[Fri, 27 Nov 15 14:06:31 -0430][DEBUG] SELECT id,name,pass,email,created_at,ln_clientes_id,modified_in FROM ln_users ORDER BY id desc LIMIT 10 OFFSET 0
+[Fri, 27 Nov 15 14:06:57 -0430][DEBUG] DESCRIBE `ln_users`
+[Fri, 27 Nov 15 14:06:57 -0430][DEBUG] SELECT COUNT(*) FROM ln_users 
+[Fri, 27 Nov 15 14:06:57 -0430][DEBUG] SELECT id,name,pass,email,created_at,ln_clientes_id,modified_in FROM ln_users ORDER BY id desc LIMIT 10 OFFSET 0
