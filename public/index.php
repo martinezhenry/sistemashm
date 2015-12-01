@@ -4,6 +4,12 @@
 
 require '../vendor/slim/slim/Slim/Slim.php';
 
+require_once '../backend/core/Configurator.php';
+
+
+
+
+
 \Slim\Slim::registerAutoloader();
 
 
@@ -34,7 +40,10 @@ $app->group('/actividades', function() use ($app){
 	require_once '../backend/controllers/actividad_controller.php';
 	$app->get('(/(:id))', function ($id = null) {
     
-    echo getActividades($id);
+            echo getActividades($id);
+            
+            echo Configurator::getInstance()->getName();
+            
 	});
 
 	$app->post('/', function () use ($app){

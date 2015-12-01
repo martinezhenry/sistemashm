@@ -1,12 +1,13 @@
 <?php
 //require_once 'D:/Mis Documentos en Local/sistemashm/backend/models/Actividad.php';
 require_once '../backend/models/Actividad.php';
+
 function getActividades($id = null){
 	
 	$act = new Actividad();
 
  	if (isset($id)) return json_encode($act->getActividad($id));
- 	 return json_encode($act->getActividades());
+ 	 return json_encode($act->getActividad());
 
 
 
