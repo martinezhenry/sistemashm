@@ -6,8 +6,9 @@
  * and open the template in the editor.
  */
 require_once 'Constants.php';
+require_once 'DBMagnament.php';
 
- const __NAME__ = 'name';
+    const __NAME__ = 'name';
     const __TIMEZONE__ = 'timezone';
     const __PRODUCTION__ = 'production';
     const __DATABASE__ = 'database';
@@ -17,6 +18,15 @@ require_once 'Constants.php';
     const __CACHE_DRIVER__ = 'cache_driver';
     const __METADATA_LIFETIME__ = 'metadata_lifetime';
     const __NAMESPACE_AUTH__ = 'namespace_auth';
+    /************************************************/
+    
+    const __HOST__ = 'host';
+    const __USERNAME__ = 'username';
+    const __PASSWORD__ = 'password';
+   // const __NAME__ = 'name';
+    const __TYPE__ = 'type';
+    //const __CHARSET__ = 'charset';
+    
 class Configurator implements Constants {
 
        
@@ -58,11 +68,31 @@ class Configurator implements Constants {
             (strcmp($key, __PRODUCTION__) === 0) ? $this->production = $value : '';
             (strcmp($key, __DATABASE__) === 0) ? $this->database = $value : '';
             (strcmp($key, __DEBUG__) === 0) ? $this->debug = $value : '';
-            (strcmp($key, __NAME__) === 0) ? $this->name = $value : '';
-            (strcmp($key, __NAME__) === 0) ? $this->name = $value : '';
+            //(strcmp($key, __NAME__) === 0) ? $this->name = $value : '';
+            //(strcmp($key, __NAME__) === 0) ? $this->name = $value : '';
         }
+        
+        $this->loadDBConfig();
+        
     }
     
+    
+    public function loadDBConfig(){
+        $configData = parse_ini_file("../backend/config/databases.ini", true);
+        if (NULL != $this->getDatabase()){
+            foreach ($configData as $key => $value){ 
+                (strcmp($key, __HOST__) === 0) ? DBMagnament::getInstance()->setHost($value) : '';
+                (strcmp($key, __USERNAME__) === 0) ? DBMagnament::getInstance()->setUser($value) : '';
+                (strcmp($key, __NAME__) === 0) ? DBMagnament::getInstance()->setDbName($value) : '';
+                (strcmp($key, __TYPE__) === 0) ? DBMagnament::getInstance()->setType($value) : '';
+                (strcmp($key, __PASSWORD__) === 0) ? DBMagnament::getInstance()->setPass($value) : '';
+
+            }
+            
+        }
+        
+    }
+            
     
     function getName() {
         return $this->name;

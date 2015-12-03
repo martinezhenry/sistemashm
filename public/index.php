@@ -44,6 +44,12 @@ $app->group('/actividades', function() use ($app){
             
             echo Configurator::getInstance()->getName();
             
+            
+            require_once '../backend/core/DBMagnament.php';
+            
+            DBMagnament::getInstance()->consultar();
+            
+            
 	});
 
 	$app->post('/', function () use ($app){
