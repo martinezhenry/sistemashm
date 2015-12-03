@@ -34,7 +34,7 @@ class DBMagnament {
         if (!isset($this->conn)){
             
             $this->dns = "$this->type:host=$this->host;dbname=$this->dbName";
-            
+            //echo $this->dns;
             $this->conn = new PDO($this->dns, $this->user, $this->pass);
             
         }
@@ -55,7 +55,7 @@ class DBMagnament {
         
         $this->connect();
         
-        foreach($this->conn->query('SELECT * from FOO') as $fila) {
+        foreach($this->conn->query('SELECT * from ln_clientes') as $fila) {
         print_r($fila);
     }
     $this->conn = null;
