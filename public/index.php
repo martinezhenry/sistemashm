@@ -5,6 +5,7 @@
 require '../vendor/slim/slim/Slim/Slim.php';
 
 require_once '../backend/core/Configurator.php';
+require_once '../backend/core/GeneratorResponse.php';
 
 
 
@@ -45,9 +46,11 @@ $app->group('/actividades', function() use ($app){
             echo Configurator::getInstance()->getName();
             
             
-            require_once '../backend/core/DBMagnament.php';
+          //  require_once '../backend/core/DBMagnament.php';
             
-            DBMagnament::getInstance()->consultar();
+           // DBMagnament::getInstance()->consultar();
+            
+            echo GeneratorResponse::getInstancia()->getResponse();
             
             
 	});

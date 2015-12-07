@@ -49,13 +49,13 @@ class DBMagnament {
     }
     
     
-    public function consultar(){
+    public function consultar($sql){
         
-        $sql = "SELECT CURRENT_TIMESTAMP FROM DUAL";
+       // $sql = "SELECT CURRENT_TIMESTAMP FROM DUAL";
         
         $this->connect();
         
-        foreach($this->conn->query('SELECT * from ln_clientes') as $fila) {
+        foreach($this->conn->query($sql) as $fila) {
         print_r($fila);
     }
     $this->conn = null;
