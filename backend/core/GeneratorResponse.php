@@ -9,7 +9,6 @@
 class GeneratorResponse {
     
     
-    
     private static $instancia;
     private $data;
     private $response;

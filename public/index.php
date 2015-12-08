@@ -50,8 +50,10 @@ $app->group('/actividades', function() use ($app){
             
            // DBMagnament::getInstance()->consultar();
             
-            echo GeneratorResponse::getInstancia()->getResponse();
+         //   echo GeneratorResponse::getInstancia()->getResponse();
+            $var = "1" + 1;
             
+            var_dump($var);
             
 	});
 

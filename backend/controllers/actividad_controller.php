@@ -6,8 +6,12 @@ function getActividades($id = null){
 	
 	$act = new Actividad();
 
- 	if (isset($id)) return json_encode($act->getActividad($id));
- 	 return json_encode($act->getActividad());
+       
+         GeneratorResponse::getInstancia()->setData(array('este es algo' => 'este es la respousta'));
+         GeneratorResponse::getInstancia()->setStatus(200);
+         GeneratorResponse::getInstancia()->makeResponse();
+ 	 
+ 	 return json_encode(GeneratorResponse::getInstancia()->getResponse());
 
 
 
