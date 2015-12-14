@@ -1,13 +1,13 @@
 <?php
 
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+//require_once 'Configurator.php';
+class DBManagement {
 
-class DBMagnament {
-    
     private $host;
     private $user;
     private $pass;
@@ -18,59 +18,80 @@ class DBMagnament {
     private $charset;
     private $dbName;
     private $dns;
+    private $resultSet;
+    private $countRows;
     private static $instance;
-    
-    
-    
+
     private function __construct() {
-       // self::$instance = new DBMagnament();
-            
+        // self::$instance = new DBMagnament();
+       // Configurator::getInstance();
     }
-    
-       
-    public function connect(){
-        
+
+    public function connect() {
+
         try {
-        if (!isset($this->conn)){
-            
-            $this->dns = "$this->type:host=$this->host;dbname=$this->dbName";
-            //echo $this->dns;
-            $this->conn = new PDO($this->dns, $this->user, $this->pass);
-            
-        }
-        
-        }  catch (PDOException $ex){
-            
+            if (!isset($this->conn)) {
+
+                $this->dns = "$this->type:host=$this->host;dbname=$this->dbName;charset=$this->charset";
+                
+                $this->conn = new PDO($this->dns, $this->user, $this->pass);
+            }
+        } catch (PDOException $ex) {
+
             echo "¡ERROR!: " . $ex->getMessage();
-            
         }
+    }
+
+    public function desconnect() {
+        $this->conn = null;
+    }
+
+    public function consultar($sql, $arrBind = null) {
+
+        // $sql = "SELECT CURRENT_TIMESTAMP FROM DUAL";
+
+        $this->connect();
+
+        $stmt = $this->conn->prepare($sql);
         
+        $stmt->execute($arrBind);
         
+        $this->setResultSet($stmt->fetchAll());
+        
+        //$this->conn->query($sql, PDO::FETCH_ASSOC, $this->resultSet);
+
+
+        $this->conn = null;
     }
     
     
-    public function consultar($sql){
-        
-       // $sql = "SELECT CURRENT_TIMESTAMP FROM DUAL";
-        
+    public function insertar($sql, $arrBind = null) {
+
+        // $sql = "SELECT CURRENT_TIMESTAMP FROM DUAL";
+
         $this->connect();
         
-        foreach($this->conn->query($sql) as $fila) {
-        print_r($fila);
-    }
-    $this->conn = null;
         
+
+        $stmt = $this->conn->prepare($sql);
         
+        $stmt->execute($arrBind);
+        
+        $this->setCountRows($stmt->rowCount());
+        
+        //$this->conn->query($sql, PDO::FETCH_ASSOC, $this->resultSet);
+
+        $this->conn = null;
     }
     
     
+    
+
     public static function getInstance() {
         if (isset(self::$instance)) {
-        return self::$instance;
+            return self::$instance;
         } else {
-            
-            return self::$instance = new DBMagnament();
-            
+            return self::$instance = new DBManagement();
         }
     }
 
@@ -158,7 +179,20 @@ class DBMagnament {
         $this->dns = $dns;
     }
 
+    function getResultSet() {
+        return $this->resultSet;
+    }
 
+    function setResultSet($resultSet) {
+        $this->resultSet = $resultSet;
+    }
     
-    
+    function getCountRows() {
+        return $this->countRows;
+    }
+
+    function setCountRows($countRows) {
+        $this->countRows = $countRows;
+    }
+
 }

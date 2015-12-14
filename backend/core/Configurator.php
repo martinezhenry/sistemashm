@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 require_once 'Constants.php';
-require_once 'DBMagnament.php';
+//require_once 'DBMagnament.php';
 
         const __NAME__ = 'name';
         const __TIMEZONE__ = 'timezone';
@@ -49,7 +49,7 @@ class Configurator implements Constants {
     public static function getInstance() {
 
         if (isset(self::$instance)) {
-            return $this->instance;
+            return self::$instance;
         } else {
             $clase = __CLASS__;
             self::$instance = new $clase;
@@ -84,11 +84,12 @@ class Configurator implements Constants {
                     foreach ($value as $key => $val) {
 
 
-                        (strcmp($key, __HOST__) === 0) ? DBMagnament::getInstance()->setHost($val) : '';
-                        (strcmp($key, __USERNAME__) === 0) ? DBMagnament::getInstance()->setUser($val) : '';
-                        (strcmp($key, __NAME__) === 0) ? DBMagnament::getInstance()->setDbName($val) : '';
-                        (strcmp($key, __TYPE__) === 0) ? DBMagnament::getInstance()->setType($val) : '';
-                        (strcmp($key, __PASSWORD__) === 0) ? DBMagnament::getInstance()->setPass($val) : '';
+                        (strcmp($key, __HOST__) === 0) ? DBManagement::getInstance()->setHost($val) : '';
+                        (strcmp($key, __USERNAME__) === 0) ? DBManagement::getInstance()->setUser($val) : '';
+                        (strcmp($key, __NAME__) === 0) ? DBManagement::getInstance()->setDbName($val) : '';
+                        (strcmp($key, __TYPE__) === 0) ? DBManagement::getInstance()->setType($val) : '';
+                        (strcmp($key, __PASSWORD__) === 0) ? DBManagement::getInstance()->setPass($val) : '';
+                        (strcmp($key, __CHARSET__) === 0) ? DBManagement::getInstance()->setCharset($val) : '';
                     }
                 }
             }

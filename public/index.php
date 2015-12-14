@@ -2,10 +2,11 @@
 
 //require '../vendor/autoload.php';
 
-require '../vendor/slim/slim/Slim/Slim.php';
+require_once '../vendor/slim/slim/Slim/Slim.php';
 
 require_once '../backend/core/Configurator.php';
 require_once '../backend/core/GeneratorResponse.php';
+require_once '../backend/core/DBManagement.php';
 
 
 
@@ -13,12 +14,13 @@ require_once '../backend/core/GeneratorResponse.php';
 
 \Slim\Slim::registerAutoloader();
 
+Configurator::getInstance();
 
 $app = new \Slim\Slim(array(
     'debug' => true,
     'mode' => 'development',
     'log.enabled' => true
-));
+        ));
 
 
 $app->get('/hello(/(:name))', function ($name = "") {
@@ -28,57 +30,46 @@ $app->get('/hello(/(:name))', function ($name = "") {
 
 /*
 
-$app->map('/actividades', function() {
-    echo "Fancy, huh?";
-})->via('GET', 'POST', 'PUT', 'DELETE')->name('foo');
+  $app->map('/actividades', function() {
+  echo "Fancy, huh?";
+  })->via('GET', 'POST', 'PUT', 'DELETE')->name('foo');
 
 
-*/
+ */
 
 
-$app->group('/actividades', function() use ($app){
+$app->group('/actividades', function() use ($app) {
 
-	require_once '../backend/controllers/actividad_controller.php';
-	$app->get('(/(:id))', function ($id = null) {
-    
-            echo getActividades($id);
-            
-            echo Configurator::getInstance()->getName();
-            
-            
-          //  require_once '../backend/core/DBMagnament.php';
-            
-           // DBMagnament::getInstance()->consultar();
-            
-         //   echo GeneratorResponse::getInstancia()->getResponse();
-            $var = "1" + 1;
-            
-            var_dump($var);
-            
-	});
+    require_once '../backend/controllers/actividad_controller.php';
+    $app->get('(/(:id))', function ($id = null) {
 
-	$app->post('/', function () use ($app){
+        echo getActividades($id);
 
-		$request = $app->request->post();
+        //echo Configurator::getInstance()->getName();
+        //  require_once '../backend/core/DBMagnament.php';
+        // DBMagnament::getInstance()->consultar();
+        //   echo GeneratorResponse::getInstancia()->getResponse();
+        // $var = "1" + 1;
+        //   var_dump($var);
+    });
 
-    
-    echo createActividad($request);
-	});
+    $app->post('/', function () use ($app) {
 
-	$app->put('/:id', function ($id) use ($app){
+        $request = $app->request->post();
+        echo createActividad($request);
+        
+    });
 
-		$request = $app->request->put();
+    $app->put('/:id', function ($id) use ($app) {
 
-    
-    echo updateActividad($id, $request);
-	});
+        $request = $app->request->put();
+        echo updateActividad($id, $request);
+    });
 
-		$app->delete('/:id', function ($id) {
-    
-    echo deleteActividad($id);
-	});
+    $app->delete('/:id', function ($id) {
 
-
+        echo deleteActividad($id);
+    });
 });
 
 
