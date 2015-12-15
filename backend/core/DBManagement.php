@@ -39,7 +39,7 @@ class DBManagement {
             }
         } catch (PDOException $ex) {
 
-            echo "¡ERROR!: " . $ex->getMessage();
+            $this->ultError = $ex->getMessage();
         }
     }
 
