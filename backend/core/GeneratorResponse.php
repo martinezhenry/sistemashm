@@ -13,12 +13,13 @@ class GeneratorResponse {
     private $data;
     private $response;
     private $status;
-
+    private $contentType;
+    private $statusMsg;
     
     
     private function __construct() {
             
-    $estado = array(  
+    $this->estado = array(  
        200 => 'OK',  
        201 => 'Created',  
        202 => 'Accepted',  
@@ -74,7 +75,7 @@ class GeneratorResponse {
        // var_dump(json_encode($this->getData(), JSON_UNESCAPED_UNICODE));
        // var_dump(($this->getData()));
  
-        $this->setResponse(utf8_encode(json_encode(array ('status' => $this->status, 'data' => $this->getData()), JSON_NUMERIC_CHECK )));
+        $this->setResponse(utf8_encode(json_encode(array ('status' => $this->statusMsg, 'data' => $this->getData()), JSON_NUMERIC_CHECK )));
         //echo $this->getResponse();
 
         }
@@ -132,6 +133,30 @@ class GeneratorResponse {
 
     function setStatus($status) {
         $this->status = $status;
+    }
+    
+    function getContentType() {
+        return $this->contentType;
+    }
+
+    function setContentType($contentType) {
+        $this->contentType = $contentType;
+    }
+
+    function getEstado() {
+        return $this->estado;
+    }
+
+    function setEstado($estado) {
+        $this->estado = $estado;
+    }
+
+    function getStatusMsg() {
+        return $this->statusMsg;
+    }
+
+    function setStatusMsg($statusMsg) {
+        $this->statusMsg = $statusMsg;
     }
 
 

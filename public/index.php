@@ -9,9 +9,6 @@ require_once '../backend/core/GeneratorResponse.php';
 require_once '../backend/core/DBManagement.php';
 
 
-
-
-
 \Slim\Slim::registerAutoloader();
 
 Configurator::getInstance();
@@ -41,23 +38,21 @@ $app->get('/hello(/(:name))', function ($name = "") {
 $app->group('/actividades', function() use ($app) {
 
     require_once '../backend/controllers/actividad_controller.php';
-    $app->get('(/(:id))', function ($id = null) {
+    $app->get('(/(:id))', function ($id = null) use ($app) {
 
-        echo getActividades($id);
-
-        //echo Configurator::getInstance()->getName();
-        //  require_once '../backend/core/DBMagnament.php';
-        // DBMagnament::getInstance()->consultar();
-        //   echo GeneratorResponse::getInstancia()->getResponse();
-        // $var = "1" + 1;
-        //   var_dump($var);
+        $body = getActividades($id);
+        $app->response->setStatus(GeneratorResponse::getInstancia()->getStatus());
+        $app->response->headers->set('Content-Type', 'application/json');
+        $app->response->setBody($body);
     });
 
     $app->post('/', function () use ($app) {
 
         $request = $app->request->post();
-        echo createActividad($request);
-        
+        $body = createActividad($request);
+        $app->response->setStatus(GeneratorResponse::getInstancia()->getStatus());
+        $app->response->headers->set('Content-Type', 'application/json');
+        $app->response->setBody($body);
     });
 
     $app->put('/:id', function ($id) use ($app) {

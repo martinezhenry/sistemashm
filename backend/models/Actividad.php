@@ -19,6 +19,7 @@ class Actividad {
 
     public function createActividad($data, $campos) {
 
+       
         $sql = 'INSERT INTO LN_ACTIVIDADES ('.implode($campos, ', ').') '
                 . 'VALUES '
                 .'('.implode(array_keys($data), ', ').')';
@@ -27,11 +28,11 @@ class Actividad {
                 . ','.mysql_real_escape_string($data['']).','.mysql_real_escape_string($data['']).','.mysql_real_escape_string($data[''])
                 . ','.mysql_real_escape_string($data['']).')';*/
         
-        echo $sql;
+       // echo $sql;
 
         DBManagement::getInstance()->insertar($sql, $data);
 
-        return DBManagement::getInstance()->getResultSet();
+        return DBManagement::getInstance()->getCountRows();
     }
     
     

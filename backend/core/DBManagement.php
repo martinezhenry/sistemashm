@@ -20,6 +20,7 @@ class DBManagement {
     private $dns;
     private $resultSet;
     private $countRows;
+    private $ultError;
     private static $instance;
 
     private function __construct() {
@@ -80,6 +81,14 @@ class DBManagement {
         $this->setCountRows($stmt->rowCount());
         
         //$this->conn->query($sql, PDO::FETCH_ASSOC, $this->resultSet);
+        
+        if ($this->getCountRows() == 0){
+            if (isset($stmt->errorInfo()[1])){
+            $this->setUltError("Error al insertar en DB. Verifique los datos del Request.");
+            }
+            
+        }
+        
 
         $this->conn = null;
     }
@@ -194,5 +203,15 @@ class DBManagement {
     function setCountRows($countRows) {
         $this->countRows = $countRows;
     }
+    
+    function getUltError() {
+        return $this->ultError;
+    }
+
+    function setUltError($ultError) {
+        $this->ultError = $ultError;
+    }
+
+
 
 }

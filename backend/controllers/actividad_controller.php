@@ -7,31 +7,28 @@ require_once '../backend/core/Configurator.php';
 require_once '../backend/core/DBInspector.php';
 
 
-  define('__CERO__',0);
+define('__CERO__', 0);
 
- //var_dump($validFields);
+//var_dump($validFields);
 global $act, $validFields, $dbInspector;
 $act = new Actividad();
 
-  $validFields = array(
-    
-     'id' => 'id',
-     'descripcion' => 'desc',
-    'fec_act_in' => 'fecha_act',
-    'cant_hrs' => 'horas',
-    'precio_unidad' => 'precio',
-    'ln_clientes_id' => 'cliente'
-    
-    
-);  
+$validFields = array(
+    'id' => 'id',
+    'desc' => 'descripcion',
+    'fecha_act' => 'fec_act_in',
+    'horas' => 'cant_hrs',
+    'precio' => 'precio_unidad',
+    'cliente' => 'ln_clientes_id'
+);
 
-    $dbInspector = new DBInspector("LN_ACTIVIDADES");
+$dbInspector = new DBInspector("LN_ACTIVIDADES");
 
 function getActividades($id = null) {
 
     //Configurator::getInstance();
     global $act;
-  
+
     $resultSet = $act->getActividad($id);
 
     if (isset($resultSet)) {
@@ -41,9 +38,17 @@ function getActividades($id = null) {
             $data[] = $fila;
         }
     }
+    
+    if (isset($data)){
+        GeneratorResponse::getInstancia()->setData($data);
+        GeneratorResponse::getInstancia()->setStatus(200);
+        
+    } else {
+        GeneratorResponse::getInstancia()->setData(null);
+        GeneratorResponse::getInstancia()->setStatus(204);
+    }
 
-    GeneratorResponse::getInstancia()->setData((isset($data)) ? $data : null);
-    GeneratorResponse::getInstancia()->setStatus(200);
+    GeneratorResponse::getInstancia()->setStatusMsg(GeneratorResponse::getInstancia()->getEstado()[GeneratorResponse::getInstancia()->getStatus()]);
     GeneratorResponse::getInstancia()->makeResponse();
     //var_dump (GeneratorResponse::getInstancia()->getResponse());
     return GeneratorResponse::getInstancia()->getResponse();
@@ -53,63 +58,74 @@ function createActividad($data) {
 
     global $act, $dbInspector, $validFields;
     $data = GeneratorResponse::getInstancia()->cleanDataPost($data);
-    //  var_dump($validFields);
+
     $dbInspector->getDescribeTable();
-    
-    $campos = array_keys($dbInspector->getFields());
-    
-    echo "camposssssssssssssssss ";
-    
-    
-    
-    var_dump(array_intersect_key(array_keys($dbInspector->getFields()), array_keys($validFields)));
-    
-    
-    
-    (validateFields($data))? $act->createActividad($data, $campos):'no valido';
-    
-    return json_encode(array('method' => 'create', 'data' => array($data)));
-}
 
-
-function validateFields($fields){
-    global $validFields, $dbInspector;
+    $campos = array_intersect(array_keys($dbInspector->getFields()), array_keys($data));
+   
+    $count = (validateFields($data)) ? $act->createActividad($data, $campos) : -1;
     
+    $data = array(
+        'cant' => $count
+        );
     
-          
+    if ($count == -1){
         
-        $dbInspector->getDescribeTable();
+         $data['msg'] = 'Campos de petición no validos.';
+         unset($data['cant']);
+        //GeneratorResponse::getInstancia()->setStatus(400);
+       // $data['error'] = DBManagement::getInstance()->getUltError();
         
-     //   var_dump($dbInspector->getDescribe());
-        
-        echo "/***************************/";
-        
-       /// var_dump($dbInspector->getFields());
-        
-        
-    
-    
-    if (is_array($fields) && count($fields) > __CERO__ && count($fields) <= count($dbInspector->getFields()) ){
-        
-        foreach ($fields as $key => $value) {
-            echo "key: " .$key;
-            var_dump($validFields);
-            if ($validFields[strtolower($key)] == null && strcmp($validFields[strtolower($key)],"") === 0){
-                
-                return FALSE;
-                
-            }
-            
-        }
-    return TRUE;    
+    } else if ($count > 0) {
+        $data['msg'] = 'Objeto Creado.';
+         GeneratorResponse::getInstancia()->setStatus(201);
+    } else {
+        $data['msg'] = 'Objeto No Creado.';
+        GeneratorResponse::getInstancia()->setStatus(400);
+        $data['error'] = DBManagement::getInstance()->getUltError();
     }
     
-    return FALSE;
+    GeneratorResponse::getInstancia()->setStatusMsg(GeneratorResponse::getInstancia()->getEstado()[GeneratorResponse::getInstancia()->getStatus()]);
+    GeneratorResponse::getInstancia()->setData((isset($data)) ? $data : null);
+   
+    GeneratorResponse::getInstancia()->makeResponse();
     
-    
-    
+    return GeneratorResponse::getInstancia()->getResponse();
 }
 
+function validateFields($fields) {
+    global $validFields, $dbInspector;
+
+    $dbInspector->getDescribeTable();
+
+    if (is_array($fields) && count($fields) > __CERO__ && count($fields) <= count($dbInspector->getFields())) {
+        foreach ($fields as $key => $value) {
+            if ($validFields[strtolower($key)] == null && strcmp($validFields[strtolower($key)], "") === 0) {
+                return FALSE;
+            }
+        }
+        return TRUE;
+    } else {
+        GeneratorResponse::getInstancia()->setStatus(400);
+        return FALSE;
+    }
+
+    return FALSE;
+}
+
+function addColons($data, $prefijo = ':' ) {
+    if (is_array($data)) {
+        foreach ($data as $key => $value) {
+
+            $newData[$prefijo . $key] = $value;
+        }
+
+        return $newData;
+    } else {
+
+        return FALSE;
+    }
+}
 
 function updateActividad($id, $data) {
 
