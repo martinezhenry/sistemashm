@@ -9,6 +9,7 @@
 class DBManagement {
 
     private $host;
+    private $port;
     private $user;
     private $pass;
     private $schema;
@@ -32,10 +33,18 @@ class DBManagement {
 
         try {
             if (!isset($this->conn)) {
-
-                $this->dns = "$this->type:host=$this->host;dbname=$this->dbName;charset=$this->charset";
-                
+                $charset =  (isset($this->charset)) ? ";charset=$this->charset" : "";
+                $port = (isset($this->charset)) ? ";port=$this->port" : "";
+                $this->dns = "$this->type:host=$this->host" . $port . ";dbname=$this->dbName" . $charset ;
+               // echo $this->dns;
                 $this->conn = new PDO($this->dns, $this->user, $this->pass);
+                
+                
+                /*$dbh = new PDO('pgsql:dbname=$dbname; 
+                           host=$host; 
+                           username=$username; 
+                           password=$password'); */
+                
             }
         } catch (PDOException $ex) {
 
@@ -51,18 +60,37 @@ class DBManagement {
 
         // $sql = "SELECT CURRENT_TIMESTAMP FROM DUAL";
 
+        try {
+        
         $this->connect();
-
+        
+        if (isset($this->conn)){
+        
         $stmt = $this->conn->prepare($sql);
         
-        $stmt->execute($arrBind);
-        
-        $this->setResultSet($stmt->fetchAll());
-        
+        if ($stmt->execute($arrBind)){
+            $this->setResultSet($stmt->fetchAll());
+        } else {
+            throw new Exception("Code:" . $stmt->errorInfo()[1] . ". Message: " . $stmt->errorInfo()[2], $stmt->errorInfo()[1]);
+        }
         //$this->conn->query($sql, PDO::FETCH_ASSOC, $this->resultSet);
+        } else {
+            //echo $this->getUltError();
+        }
 
-
-        $this->conn = null;
+        $this->desconnect();
+        
+        } catch (Exception $ex){
+           
+            $this->setUltError($ex->getMessage());
+           // echo $ex->getMessage();
+            //echo $ex->getCode();
+            //var_dump( $ex->getTrace());
+            //echo $ex->getPrevious();
+            //echo $ex->getTraceAsString();
+            
+        }
+        
     }
     
     
@@ -79,12 +107,12 @@ class DBManagement {
         $stmt->execute($arrBind);
         
         $this->setCountRows($stmt->rowCount());
-        
+      //  echo $sql;
         //$this->conn->query($sql, PDO::FETCH_ASSOC, $this->resultSet);
         
         if ($this->getCountRows() == 0){
             if (isset($stmt->errorInfo()[1])){
-            $this->setUltError("Error al insertar en DB. Verifique los datos del Request.");
+            $this->setUltError("Code:" . $stmt->errorInfo()[1] . ". Message: " . $stmt->errorInfo()[2], $stmt->errorInfo()[1]);
             }
             
         }
@@ -210,6 +238,14 @@ class DBManagement {
 
     function setUltError($ultError) {
         $this->ultError = $ultError;
+    }
+
+    function getPort() {
+        return $this->port;
+    }
+
+    function setPort($port) {
+        $this->port = $port;
     }
 
 

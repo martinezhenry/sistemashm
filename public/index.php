@@ -49,16 +49,14 @@ $app->group('/actividades', function() use ($app) {
     $app->post('/', function () use ($app) {
 
         try {
-            
-          4/0;
-            
-        $request = $app->request->post();
-        $body = createActividad($request);
-        $app->response->setStatus(GeneratorResponse::getInstancia()->getStatus());
-        $app->response->headers->set('Content-Type', 'application/json');
-        $app->response->setBody($body);
-        } catch(Exception $ex){
-            
+
+            $request = $app->request->post();
+            $body = createActividad($request);
+            $app->response->setStatus(GeneratorResponse::getInstancia()->getStatus());
+            $app->response->headers->set('Content-Type', 'application/json');
+            $app->response->setBody($body);
+        } catch (Exception $ex) {
+
             GeneratorResponse::getInstancia()->setStatus(500);
             GeneratorResponse::getInstancia()->setStatusMsg(GeneratorResponse::getInstancia()->getEstado()[GeneratorResponse::getInstancia()->getStatus()]);
             GeneratorResponse::getInstancia()->setData($ex->getMessage());
@@ -68,20 +66,39 @@ $app->group('/actividades', function() use ($app) {
             $app->response->headers->set('Content-Type', 'application/json');
             $app->response->setBody($body);
             //echo $ex->getMessage();            
-            
         }
-        
     });
 
     $app->put('/:id', function ($id) use ($app) {
 
-        $request = $app->request->put();
-        echo updateActividad($id, $request);
+       try {
+
+            $request = $app->request->put();
+            $body = updateActividad($id, $request);
+            $app->response->setStatus(GeneratorResponse::getInstancia()->getStatus());
+            $app->response->headers->set('Content-Type', 'application/json');
+            $app->response->setBody($body);
+        } catch (Exception $ex) {
+
+            GeneratorResponse::getInstancia()->setStatus(500);
+            GeneratorResponse::getInstancia()->setStatusMsg(GeneratorResponse::getInstancia()->getEstado()[GeneratorResponse::getInstancia()->getStatus()]);
+            GeneratorResponse::getInstancia()->setData($ex->getMessage());
+            GeneratorResponse::getInstancia()->makeResponse();
+            $body = GeneratorResponse::getInstancia()->getResponse();
+            $app->response->setStatus(GeneratorResponse::getInstancia()->getStatus());
+            $app->response->headers->set('Content-Type', 'application/json');
+            $app->response->setBody($body);
+            //echo $ex->getMessage();            
+        }
     });
 
-    $app->delete('/:id', function ($id) {
+    $app->delete('/:id', function ($id) use ($app) {
 
-        echo deleteActividad($id);
+        $body = deleteActividad($id);
+        $app->response->setStatus(GeneratorResponse::getInstancia()->getStatus());
+        $app->response->headers->set('Content-Type', 'application/json');
+        $app->response->setBody($body);
+        
     });
 });
 
