@@ -8,79 +8,77 @@ class Actividad {
     public function getActividad($id = null) {
 
         (isset($id)) ?
-                        $sql = 'SELECT * FROM LN_ACTIVIDADES WHERE  ID = ?' :
-                        $sql = 'SELECT * FROM LN_ACTIVIDADES';
+                        $sql = 'SELECT ID, DESCRIPCION AS \'DESC\', FEC_ACT_IN AS FEC_ACT, CANT_HRS AS HORAS,'
+                        . ' PRECIO_UNIDAD AS PRECIO, LN_CLIENTES_ID AS CLIENTE FROM LN_ACTIVIDADES WHERE  ID = ?' :
+                        $sql = 'SELECT ID, DESCRIPCION AS \'DESC\', FEC_ACT_IN AS FEC_ACT, CANT_HRS AS HORAS,'
+                        . ' PRECIO_UNIDAD AS PRECIO, LN_CLIENTES_ID AS CLIENTE FROM LN_ACTIVIDADES';
 
         DBManagement::getInstance()->consultar($sql, array(mysql_real_escape_string($id)));
-        
+
 
         return DBManagement::getInstance()->getResultSet();
     }
 
     public function createActividad($data, $campos) {
 
-       
-        $sql = 'INSERT INTO LN_ACTIVIDADES ('.implode($campos, ', ').') '
+
+        $sql = 'INSERT INTO LN_ACTIVIDADES (' . implode($campos, ', ') . ') '
                 . 'VALUES '
-                .'( :'.implode(array_keys($data), ', :').')';
+                . '( :' . implode(array_keys($data), ', :') . ')';
         /*
-                . '('.mysql_real_escape_string($data['']).','.mysql_real_escape_string($data['']).','.mysql_real_escape_string($data[''])
-                . ','.mysql_real_escape_string($data['']).','.mysql_real_escape_string($data['']).','.mysql_real_escape_string($data[''])
-                . ','.mysql_real_escape_string($data['']).')';*/
-        
-       // echo $sql;
+          . '('.mysql_real_escape_string($data['']).','.mysql_real_escape_string($data['']).','.mysql_real_escape_string($data[''])
+          . ','.mysql_real_escape_string($data['']).','.mysql_real_escape_string($data['']).','.mysql_real_escape_string($data[''])
+          . ','.mysql_real_escape_string($data['']).')'; */
+
+        // echo $sql;
 
         DBManagement::getInstance()->insertar($sql, $data);
 
         return DBManagement::getInstance()->getCountRows();
     }
-    
-    
-     public function updateActividad($data, $campos) {
 
-       
-        
-         $sets = "";
-         (count($data) > 1) ? $coma = ', ' : $coma = '';
-         foreach ($campos as $key => $value) {
-             
-             
-             $sets .= $key . ' = ' . ':' . $value . $coma;
-            
-         }
-            
-         $sets = substr($sets, 0, -2);
-   //        echo 'aquiiiiiii: ' .substr($sets, 0, -2);
-         
-         
-         
-         
-        $sql = 'UPDATE LN_ACTIVIDADES SET '.$sets.' '
+    public function updateActividad($data, $campos) {
+
+
+
+        $sets = "";
+        (count($data) > 1) ? $coma = ', ' : $coma = '';
+        foreach ($campos as $key => $value) {
+
+
+            $sets .= $key . ' = ' . ':' . $value . $coma;
+        }
+
+        $sets = substr($sets, 0, -2);
+        //        echo 'aquiiiiiii: ' .substr($sets, 0, -2);
+
+
+
+
+        $sql = 'UPDATE LN_ACTIVIDADES SET ' . $sets . ' '
                 . 'WHERE '
-                .'ID = :id';
+                . 'ID = :id';
         /*
-                . '('.mysql_real_escape_string($data['']).','.mysql_real_escape_string($data['']).','.mysql_real_escape_string($data[''])
-                . ','.mysql_real_escape_string($data['']).','.mysql_real_escape_string($data['']).','.mysql_real_escape_string($data[''])
-                . ','.mysql_real_escape_string($data['']).')';*/
-        
-      
+          . '('.mysql_real_escape_string($data['']).','.mysql_real_escape_string($data['']).','.mysql_real_escape_string($data[''])
+          . ','.mysql_real_escape_string($data['']).','.mysql_real_escape_string($data['']).','.mysql_real_escape_string($data[''])
+          . ','.mysql_real_escape_string($data['']).')'; */
+
+
         //        exit;
 
         DBManagement::getInstance()->insertar($sql, $data);
-         
+
         return DBManagement::getInstance()->getCountRows();
     }
-    
-    
+
     public function deleteActividad($id) {
 
-       
+
         $sql = 'DELETE FROM LN_ACTIVIDADES WHERE ID = ?';
-        
+
         DBManagement::getInstance()->insertar($sql, array(mysql_real_escape_string($id)));
 
         return DBManagement::getInstance()->getCountRows();
     }
-
 
 }

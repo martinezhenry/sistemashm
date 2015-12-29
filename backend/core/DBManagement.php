@@ -34,7 +34,7 @@ class DBManagement {
         try {
             if (!isset($this->conn)) {
                 $charset =  (isset($this->charset)) ? ";charset=$this->charset" : "";
-                $port = (isset($this->charset)) ? ";port=$this->port" : "";
+                $port = (isset($this->port)) ? ";port=$this->port" : "";
                 $this->dns = "$this->type:host=$this->host" . $port . ";dbname=$this->dbName" . $charset ;
                // echo $this->dns;
                 $this->conn = new PDO($this->dns, $this->user, $this->pass);

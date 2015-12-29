@@ -11,13 +11,26 @@ require_once '../backend/core/DBManagement.php';
 
 \Slim\Slim::registerAutoloader();
 
+
+
 Configurator::getInstance();
+
+
+
 
 $app = new \Slim\Slim(array(
     'debug' => true,
     'mode' => 'development',
     'log.enabled' => true
         ));
+
+/*
+  $app->add(function (ServerRequestInterface $request, ResponseInterface $response, callable $next) {
+  // Use the PSR 7 $request object
+
+  return $next($request, $response);
+  });
+ */
 
 
 $app->get('/hello(/(:name))', function ($name = "") {
@@ -33,9 +46,31 @@ $app->get('/hello(/(:name))', function ($name = "") {
 
 
  */
+/*
+  $app['notFoundHandler'] = function ($app) {
+  return function ($request, $response) use ($app) {
+  GeneratorResponse::getInstancia()->setStatus(500);
+  GeneratorResponse::getInstancia()->setStatusMsg(GeneratorResponse::getInstancia()->getEstado()[GeneratorResponse::getInstancia()->getStatus()]);
+  GeneratorResponse::getInstancia()->setData('app no found');
+  GeneratorResponse::getInstancia()->makeResponse();
+  $body = GeneratorResponse::getInstancia()->getResponse();
+  $app->response->setStatus(GeneratorResponse::getInstancia()->getStatus());
+  $app->response->headers->set('Content-Type', 'application/json');
+  $app->response->setBody($body);
+  };
+  }; */
+
+
+
+
+
+
 
 
 $app->group('/actividades', function() use ($app) {
+
+    $request = $app->request;
+
 
     require_once '../backend/controllers/actividad_controller.php';
     $app->get('(/(:id))', function ($id = null) use ($app) {
@@ -71,7 +106,7 @@ $app->group('/actividades', function() use ($app) {
 
     $app->put('/:id', function ($id) use ($app) {
 
-       try {
+        try {
 
             $request = $app->request->put();
             $body = updateActividad($id, $request);
@@ -98,9 +133,28 @@ $app->group('/actividades', function() use ($app) {
         $app->response->setStatus(GeneratorResponse::getInstancia()->getStatus());
         $app->response->headers->set('Content-Type', 'application/json');
         $app->response->setBody($body);
-        
+    });
+
+    $app->notFound(function() use ($app) {
+
+
+        GeneratorResponse::getInstancia()->setStatus(404);
+        GeneratorResponse::getInstancia()->setStatusMsg(GeneratorResponse::getInstancia()->getEstado()[GeneratorResponse::getInstancia()->getStatus()]);
+        GeneratorResponse::getInstancia()->setData('app no found');
+        GeneratorResponse::getInstancia()->makeResponse();
+        $body = GeneratorResponse::getInstancia()->getResponse();
+        $app->response->setStatus(GeneratorResponse::getInstancia()->getStatus());
+
+        $app->response->headers->set('Content-Type', 'application/json');
+        $app->response->setBody($body);
+      ///  $app->render(404, null);
+
+        echo $body; 
     });
 });
+
+
+
 
 
 $app->run();

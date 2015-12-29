@@ -15,14 +15,16 @@ $db = DBManagement::getInstance();
 
 
 $db->setHost('localhost');
-$db->setUser('root');
-$db->setPass('');
-$db->setType('mysql');
-$db->setDbname('');
+$db->setUser('postgres');
+$db->setPass('0000');
+$db->setType('pgsql');
+$db->setDbname('postgres');
+$db->setPort('5432');
+//$db->setCharset('utf8');
 
 
-
-$sql = "SELECT CURRENT_STAMP FROM DUAL";
+$sql = "select schema_name
+from information_schema.schemata";
 
 $db->consultar($sql);
 
