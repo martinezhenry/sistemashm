@@ -69,7 +69,7 @@ class DBManagement {
         $stmt = $this->conn->prepare($sql);
         
         if ($stmt->execute($arrBind)){
-            $this->setResultSet($stmt->fetchAll());
+            $this->setResultSet($stmt->fetchAll(PDO::FETCH_ASSOC));
         } else {
             throw new Exception("Code:" . $stmt->errorInfo()[1] . ". Message: " . $stmt->errorInfo()[2], $stmt->errorInfo()[1]);
         }
